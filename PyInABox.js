@@ -1,8 +1,8 @@
 // import Nevow.Athena
 // import Divmod.Runtime
 
-CalculatorDemo.Calculator = Nevow.Athena.Widget.subclass("CalculatorDemo.Calculator");
-CalculatorDemo.Calculator.methods(
+pyinabox = Nevow.Athena.Widget.subclass("pyinabox");
+pyinabox.methods(
     function setCaretPosition(self, elem, caretPos, txt) {
         if(elem != null) {
             ptr = 0;

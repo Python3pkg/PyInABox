@@ -6,9 +6,9 @@
         <n:invisible n:render="liveglue" />
     </head>
     <body>
-        <div n:render="calculator">Calculator Goes Here</div>
+        <div n:render="PyInABox">PyInABox Goes Here</div>
 
-        <div class="calculator" id="calculator" n:pattern="CalculatorPattern" n:render="liveElement"
+        <div class="pyinabox" id="pyinabox" n:pattern="PyInABoxPattern" n:render="liveElement"
                 xmlns:athena="http://divmod.org/ns/athena/0.7">
             <textarea class="Shell" id='shell'><athena:handler event="onkeypress" handler="textUpdate" /><athena:handler event="onkeydown" handler="keyDown" /><athena:handler event="onkeyup" handler="keyUp" /><athena:handler event="onpaste" handler="paste" /></textarea>
             

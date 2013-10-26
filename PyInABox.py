@@ -1,10 +1,26 @@
+#  PyInABox.py
+#  
+#  Copyright 2013 Logan Perkins <perkins@pyinabox.alestan.publicvm.com>
+#  
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#  
+#  
 #tab-width: 2
-# Copyright (c) 2008 Divmod.  See LICENSE for details.
 
-"""
-Demonstration of an Athena Widget which accepts input from the browser and
-sends back responses.
-"""
+
 
 import sys,gtk,vte,threading,time
 
@@ -17,38 +33,18 @@ from nevow.athena import LivePage, LiveElement, expose
 from nevow.loaders import xmlfile, xmlstr, htmlfile, htmlstr
 from nevow.appserver import NevowSite
 
-# Handy helper for finding external resources nearby.
+
 sibling = FilePath(__file__).sibling
 def Print(*args):
   print args
 
-
-
-
-
-def GrabCalc():
-        f=open('PyInABox.html')
-        txt=f.read()
-        f.close()
-        return txt
-class CalculatorElement(LiveElement):
+class PyInABoxElement(LiveElement):
     """
-    A "live" calculator.
-
-    All buttons presses in the browser are sent to the server. The server
-    evaluates the expression and sets the output in the browser.
-
-    @ivar validSymbols: A C{str} giving all of the symbols which the browser is
-        allowed to submit to us.  Input is checked against this before being
-        submitted to the model.
-
-    @ivar calc: A L{Calculator} which will be used to handle all inputs and
-        generate computed outputs.
     """
 
-    docFactory = xmlstr(GrabCalc(), 'CalculatorPattern')
+    docFactory = xmlfile(sibling('PyInABox.html').path, 'PyInABoxPattern')
 
-    jsClass = u"CalculatorDemo.Calculator"
+    jsClass = u"PyInABox.PyInABox"
 
     validSymbols = '0123456789/*-=+.C[]^ d'
     keyCodes={37:gtk.keysyms.Left,
@@ -84,11 +80,10 @@ class CalculatorElement(LiveElement):
     maskCodes={gtk.keysyms.Control_L:4,
               gtk.keysyms.Alt_L:8
               }
-    def __init__(self, calc):
+    def __init__(self):
 
         LiveElement.__init__(self)
         self.Modifiers=[]
-        self.calc = calc
         self.Vte=vte.Terminal()
         self.Vte.set_size(80,40)
         self.Vte.fork_command('./Login.sh')
@@ -158,34 +153,31 @@ class CalculatorElement(LiveElement):
         self.Vte.emit('key-press-event',a)
     expose(Process)
 
-class CalculatorParentPage(LivePage):
+class PyInABoxParentPage(LivePage):
     """
-    A "live" container page for L{CalculatorElement}.
+    
     """
-    docFactory = xmlstr(GrabCalc())
+    docFactory = xmlfile(sibling('PyInABox.html').path)
     def renderHTTP(self, *args):
-            self.docFactory = xmlstr(GrabCalc())
             return LivePage.renderHTTP(self, *args)
     def __init__(self, *a, **kw):
         LivePage.__init__(self)
-        # Update the mapping of known JavaScript modules so that the
-        # client-side code for this example can be found and served to the
-        # browser.
-        self.jsModules.mapping[u'CalculatorDemo'] = sibling(
+        self.jsModules.mapping[u'PyInABox'] = sibling(
             'PyInABox.js').path
 
 
-    def render_calculator(self, ctx, data):
+    def render_PyInABox(self, ctx, data):
         """
-        Replace the tag with a new L{CalculatorElement}.
+        
         """
-        c = CalculatorElement(None)
+        c = PyInABoxElement()
+        
 
         c.setFragmentParent(self)
         return c
-class Parent(CalculatorParentPage):
+class Parent(PyInABoxParentPage):
         def renderHTTP(self, *args):
-                return CalculatorParentPage(calc=None)
+                return PyInABoxParentPage()
 
 from twisted.internet import ssl
 
