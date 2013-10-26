@@ -193,10 +193,10 @@ def main():
     log.startLogging(sys.stdout)
     site = NevowSite(Parent())
     Method="SSL"
-    SSLPrivateKey='/home/perkins/CA/private/email.privkey.pem'
-    SSLCert='/home/perkins/CA/newcerts/01.pem'
+    SSLPrivateKey='/etc/CA/myCA/private/server-key-cert.pem'
+    SSLCert='/etc/CA/myCA/private/server-key-cert.pem'
     reactor.listenTCP(18080, site)
-    #reactor.listenSSL(18080, site,                                 contextFactory=ssl.DefaultOpenSSLContextFactory(            SSLPrivateKey,            SSLCert            ))
+    reactor.listenSSL(18081, site, contextFactory=ssl.DefaultOpenSSLContextFactory(SSLPrivateKey,SSLCert))
     reactor.run()
 
 
