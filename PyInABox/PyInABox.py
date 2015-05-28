@@ -44,10 +44,11 @@ class PyInABoxElement(LiveElement):
 
     docFactory = xmlfile(sibling('PyInABox.html').path, 'PyInABoxPattern')
 
-    jsClass = u"PyInABox.PyInABox"
+    jsClass = u"pyinabox"
 
     validSymbols = '0123456789/*-=+.C[]^ d'
-    keyCodes={37:gtk.keysyms.Left,
+    keyCodes={8:gtk.keysyms.BackSpace,
+              37:gtk.keysyms.Left,
               39:gtk.keysyms.Right,
               38:gtk.keysyms.Up,
               40:gtk.keysyms.Down,
@@ -100,7 +101,13 @@ class PyInABoxElement(LiveElement):
           self.Vte.emit('button-release-event',a)
     expose(keyUp)
     def keyDown(self, keycode):
+        if int(keycode) in [8, 10]:
+          if int(keycode)==13:
+            keycode=10
+          self.Vte.feed_child(chr(int(keycode)))
+          return;
         kc=self.keyCodes.get(int(keycode))
+        print kc
         self.Modifiers.append(kc)
         if kc:
           a=gtk.gdk.Event(8);
@@ -112,9 +119,11 @@ class PyInABoxElement(LiveElement):
           a.state=gtk.gdk.ModifierType(v)
           if v:
             a.is_modifier=True
+          print a
           self.Vte.emit('button-press-event',a)
     expose(keyDown)
     def Meta(self, keycode):
+        print 121
         kc=self.keyCodes.get(int(keycode))
         if kc:
           a=gtk.gdk.Event(8);
@@ -130,7 +139,8 @@ class PyInABoxElement(LiveElement):
 
     expose(Meta)
     def Refresh(self,*args):
-      self.callRemote('Refresh',unicode(self.Vte.get_text(lambda *a:True)).rstrip('\n'), self.Vte.get_cursor_position())
+      self.callRemote('Refresh',unicode(self.Vte.get_text(lambda *a:True)).rstrip('\n'), self.Vte.get_cursor_position()
+      )
     expose(Refresh)
     def Process(self, symbol):
       if int(symbol) in [13, 8]:
@@ -162,7 +172,7 @@ class PyInABoxParentPage(LivePage):
             return LivePage.renderHTTP(self, *args)
     def __init__(self, *a, **kw):
         LivePage.__init__(self)
-        self.jsModules.mapping[u'PyInABox'] = sibling(
+        self.jsModules.mapping[u'pyinabox'] = sibling(
             'PyInABox.js').path
 
 
@@ -185,10 +195,10 @@ def main():
     log.startLogging(sys.stdout)
     site = NevowSite(Parent())
     Method="SSL"
-    SSLPrivateKey='/etc/CA/myCA/private/server-key-cert.pem'
-    SSLCert='/etc/CA/myCA/private/server-key-cert.pem'
+    #~ SSLPrivateKey='/etc/CA/myCA/private/server-key-cert.pem'
+    #~ SSLCert='/etc/CA/myCA/private/server-key-cert.pem'
     reactor.listenTCP(18081, site)
-    reactor.listenSSL(18080, site, contextFactory=ssl.DefaultOpenSSLContextFactory(SSLPrivateKey,SSLCert))
+    #~ reactor.listenSSL(18080, site, contextFactory=ssl.DefaultOpenSSLContextFactory(SSLPrivateKey,SSLCert))
     reactor.run()
 
 

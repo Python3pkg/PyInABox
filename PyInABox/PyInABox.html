@@ -1,0 +1,39 @@
+<html xmlns:n="http://nevow.com/ns/nevow/0.1">
+    <head>
+         <style type="text/css">
+
+#editor { 
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+
+            </style>
+            <script src="http://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://cdn.rawgit.com/ajaxorg/ace-builds/master/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+        <style type='text/css'>
+          textarea {width: 100%; height:90%;}
+        </style>
+        <n:invisible n:render="liveglue" />
+    </head>
+    <body>
+        <div n:render="PyInABox">PyInABox Goes Here</div>
+        <div class="pyinabox" id="pyinabox" n:pattern="PyInABoxPattern" n:render="liveElement"
+                xmlns:athena="http://divmod.org/ns/athena/0.7">
+            
+            
+
+            <div class='container'>
+
+                    
+            
+                <div name="shell"  class="Shell" id="shell"></div>
+            </div>
+
+        </div>
+    </body>
+</html>
+
