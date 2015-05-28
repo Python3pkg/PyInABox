@@ -187,8 +187,8 @@ def main():
     Method="SSL"
     SSLPrivateKey='/etc/CA/myCA/private/server-key-cert.pem'
     SSLCert='/etc/CA/myCA/private/server-key-cert.pem'
-    reactor.listenTCP(18080, site)
-    reactor.listenSSL(18081, site, contextFactory=ssl.DefaultOpenSSLContextFactory(SSLPrivateKey,SSLCert))
+    reactor.listenTCP(18081, site)
+    reactor.listenSSL(18080, site, contextFactory=ssl.DefaultOpenSSLContextFactory(SSLPrivateKey,SSLCert))
     reactor.run()
 
 
