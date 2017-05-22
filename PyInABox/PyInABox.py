@@ -36,7 +36,7 @@ from nevow.appserver import NevowSite
 
 sibling = FilePath(__file__).sibling
 def Print(*args):
-  print args
+  print(args)
 
 class PyInABoxElement(LiveElement):
     """
@@ -44,7 +44,7 @@ class PyInABoxElement(LiveElement):
 
     docFactory = xmlfile(sibling('PyInABox.html').path, 'PyInABoxPattern')
 
-    jsClass = u"pyinabox"
+    jsClass = "pyinabox"
 
     validSymbols = '0123456789/*-=+.C[]^ d'
     keyCodes={8:gtk.keysyms.BackSpace,
@@ -92,7 +92,7 @@ class PyInABoxElement(LiveElement):
     def keyUp(self, keycode):
         kc=self.keyCodes.get(int(keycode))
         if kc in self.Modifiers:  
-          for i in xrange(self.Modifiers.count(kc)):
+          for i in range(self.Modifiers.count(kc)):
             self.Modifiers.remove(kc)
         if kc:
           a=gtk.gdk.Event(8);
@@ -107,7 +107,7 @@ class PyInABoxElement(LiveElement):
           self.Vte.feed_child(chr(int(keycode)))
           return;
         kc=self.keyCodes.get(int(keycode))
-        print kc
+        print(kc)
         self.Modifiers.append(kc)
         if kc:
           a=gtk.gdk.Event(8);
@@ -119,11 +119,11 @@ class PyInABoxElement(LiveElement):
           a.state=gtk.gdk.ModifierType(v)
           if v:
             a.is_modifier=True
-          print a
+          print(a)
           self.Vte.emit('button-press-event',a)
     expose(keyDown)
     def Meta(self, keycode):
-        print 121
+        print(121)
         kc=self.keyCodes.get(int(keycode))
         if kc:
           a=gtk.gdk.Event(8);
@@ -139,7 +139,7 @@ class PyInABoxElement(LiveElement):
 
     expose(Meta)
     def Refresh(self,*args):
-      self.callRemote('Refresh',unicode(self.Vte.get_text(lambda *a:True)).rstrip('\n'), self.Vte.get_cursor_position()
+      self.callRemote('Refresh',str(self.Vte.get_text(lambda *a:True)).rstrip('\n'), self.Vte.get_cursor_position()
       )
     expose(Refresh)
     def Process(self, symbol):
@@ -155,9 +155,9 @@ class PyInABoxElement(LiveElement):
         for i in self.Modifiers:
           v=v | self.maskCodes.get(i,0)
         a.state=gtk.gdk.ModifierType(v)
-        print a.state
-        print v
-        print a
+        print(a.state)
+        print(v)
+        print(a)
         if v:
           a.is_modifier=True
         self.Vte.emit('key-press-event',a)
@@ -172,7 +172,7 @@ class PyInABoxParentPage(LivePage):
             return LivePage.renderHTTP(self, *args)
     def __init__(self, *a, **kw):
         LivePage.__init__(self)
-        self.jsModules.mapping[u'pyinabox'] = sibling(
+        self.jsModules.mapping['pyinabox'] = sibling(
             'PyInABox.js').path
 
 
@@ -207,7 +207,7 @@ def main():
 try:
   import gtk
 except:
-  print >> sys.stderr, "You need to install the python gtk bindings"
+  print("You need to install the python gtk bindings", file=sys.stderr)
   sys.exit(1)
 
 # import vte
